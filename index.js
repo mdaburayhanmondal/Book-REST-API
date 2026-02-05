@@ -11,7 +11,7 @@ app.use(cors());
 // view all books
 app.use('/books', booksRoute);
 
-app.use('/', (req, res) => {
+app.get('/', (req, res) => {
   res.json({
     allBooks: `Visit /books to view all books`,
     specificBook: 'Visit /books/id to view specific book',
