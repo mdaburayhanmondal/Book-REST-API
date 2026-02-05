@@ -1,5 +1,7 @@
 const express = require('express');
 const router = express.Router();
+const NodeCache = require('node-cache');
+const cache = new NodeCache();
 
 // local database
 let books = [
@@ -20,8 +22,21 @@ let books = [
   },
 ];
 
+// middleware for caching
+const cachingMiddleware = (req, res, next) => {
+  const key = req.originalUrl;
+  const cacheData = cache.get(key);
+  if (cacheData) {
+    console.log('Data cached successfully.');
+    return res.json(cacheData);
+  }
+  console.log('First time visited. No caches.');
+  next();
+};
+
 // view all books
-router.get('/', (req, res) => {
+router.get('/', cachingMiddleware, (req, res) => {
+  cache.set(req.originalUrl, books);
   res.status(200).json(books);
 });
 
