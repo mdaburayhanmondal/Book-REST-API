@@ -6,7 +6,12 @@ const booksRoute = require('./src/routes/booksRoute.js');
 const port = process.env.PORT || 3000;
 
 app.use(express.json());
-app.use(cors());
+app.use(
+  cors({
+    origin: [`http://localhost:${port}`],
+    methods: ['GET', 'POST', 'PATCH', 'DELETE'],
+  }),
+);
 
 // view all books
 app.use('/books', booksRoute);
